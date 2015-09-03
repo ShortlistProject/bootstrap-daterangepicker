@@ -55,6 +55,7 @@
         this.linkedCalendars = true;
         this.autoUpdateInput = true;
         this.ranges = {};
+        this.calendarsOpen = true;
 
         this.opens = 'right';
         if (this.element.hasClass('pull-right'))
@@ -337,7 +338,9 @@
             for (range in this.ranges) {
                 list += '<li>' + range + '</li>';
             }
-            list += '<li>' + this.locale.customRangeLabel + '</li>';
+            if (!this.calendarsOpen) {
+                list += '<li>' + this.locale.customRangeLabel + '</li>';
+            }
             list += '</ul>';
             this.container.find('.ranges ul').remove();
             this.container.find('.ranges').prepend(list);
@@ -517,23 +520,12 @@
 
         updateMonthsInView: function() {
             if (this.endDate) {
-
-                //if both dates are visible already, do nothing
-                if (this.leftCalendar.month && this.rightCalendar.month &&
-                    (this.startDate.format('YYYY-MM') == this.leftCalendar.month.format('YYYY-MM') || this.startDate.format('YYYY-MM') == this.rightCalendar.month.format('YYYY-MM'))
-                    &&
-                    (this.endDate.format('YYYY-MM') == this.leftCalendar.month.format('YYYY-MM') || this.endDate.format('YYYY-MM') == this.rightCalendar.month.format('YYYY-MM'))
-                    ) {
-                    return;
-                }
-
                 this.leftCalendar.month = this.startDate.clone().date(2);
                 if (!this.linkedCalendars && (this.endDate.month() != this.startDate.month() || this.endDate.year() != this.startDate.year())) {
                     this.rightCalendar.month = this.endDate.clone().date(2);
                 } else {
                     this.rightCalendar.month = this.startDate.clone().date(2).add(1, 'month');
                 }
-                
             } else {
                 if (this.leftCalendar.month.format('YYYY-MM') != this.startDate.format('YYYY-MM') && this.rightCalendar.month.format('YYYY-MM') != this.startDate.format('YYYY-MM')) {
                     this.leftCalendar.month = this.startDate.clone().date(2);
@@ -1053,6 +1045,10 @@
             this.container.show();
             this.move();
             this.element.trigger('show.daterangepicker', this);
+            // Auto show both calendars with custom range obj when calendarsOpen bool is set to true
+            if (this.calendarsOpen) {
+                this.showCalendars();
+            }
             this.isShowing = true;
         },
 
