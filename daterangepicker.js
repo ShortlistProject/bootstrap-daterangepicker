@@ -336,11 +336,9 @@
 
             var list = '<ul>';
             for (range in this.ranges) {
-                list += '<li>' + range + '</li>';
+                list += '<li class="set-custom-range">' + range + '</li>';
             }
-            if (!this.calendarsOpen) {
-                list += '<li>' + this.locale.customRangeLabel + '</li>';
-            }
+            list += '<li class="clear-range">' + this.locale.customRangeLabel + '</li>';
             list += '</ul>';
             this.container.find('.ranges ul').remove();
             this.container.find('.ranges').prepend(list);
@@ -412,7 +410,7 @@
         this.container.find('.ranges')
             .on('click.daterangepicker', 'button.applyBtn', $.proxy(this.clickApply, this))
             .on('click.daterangepicker', 'button.cancelBtn', $.proxy(this.clickCancel, this))
-            .on('click.daterangepicker', 'li', $.proxy(this.clickRange, this))
+            .on('click.daterangepicker', 'li.set-custom-range', $.proxy(this.clickRange, this))
             .on('mouseenter.daterangepicker', 'li', $.proxy(this.hoverRange, this))
             .on('mouseleave.daterangepicker', 'li', $.proxy(this.updateFormInputs, this));
 
