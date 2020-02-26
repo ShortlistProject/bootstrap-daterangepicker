@@ -1050,7 +1050,7 @@
             this.isShowing = true;
         },
 
-        hide: function(e) {
+        hide: function(update = false) {
             if (!this.isShowing) return;
 
             //incomplete date selection, revert to last values
@@ -1059,17 +1059,23 @@
                 this.endDate = this.oldEndDate.clone();
             }
 
-            //if a new date range was selected, invoke the user callback function
-            // if (!this.startDate.isSame(this.oldStartDate) || !this.endDate.isSame(this.oldEndDate))
-                this.callback(this.startDate, this.endDate, this.chosenLabel);
+            if (update) {
 
-            //if picker is attached to a text input, update it
-            if (this.element.is('input') && !this.singleDatePicker && this.autoUpdateInput) {
-                this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
-                this.element.trigger('change');
-            } else if (this.element.is('input') && this.autoUpdateInput) {
-                this.element.val(this.startDate.format(this.locale.format));
-                this.element.trigger('change');
+                //if a new date range was selected, invoke the user callback function
+                // if (!this.startDate.isSame(this.oldStartDate) || !this.endDate.isSame(this.oldEndDate))
+                    this.callback(this.startDate, this.endDate, this.chosenLabel);
+
+                //if picker is attached to a text input, update it
+                if (this.element.is('input') && !this.singleDatePicker && this.autoUpdateInput) {
+                    this.element.val(this.startDate.format(this.locale.format) + this.locale.separator + this.endDate.format(this.locale.format));
+                    this.element.trigger('change');
+                } else if (this.element.is('input') && this.autoUpdateInput) {
+                    this.element.val(this.startDate.format(this.locale.format));
+                    this.element.trigger('change');
+                }
+            } else {
+                this.startDate = this.oldStartDate.clone();
+                this.endDate = this.oldEndDate.clone();
             }
 
             $(document).off('.daterangepicker');
@@ -1275,7 +1281,7 @@
         },
 
         clickApply: function(e) {
-            this.hide();
+            this.hide(true);
             this.element.trigger('apply.daterangepicker', this);
         },
 
