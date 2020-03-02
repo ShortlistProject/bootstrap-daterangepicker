@@ -1050,7 +1050,8 @@
             this.isShowing = true;
         },
 
-        hide: function(update = false) {
+        hide: function() {
+            var update = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
             if (!this.isShowing) return;
 
             //incomplete date selection, revert to last values
